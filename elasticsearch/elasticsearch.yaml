@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: elasticsearch
+  name: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: elasticsearch
+    spec:
+      containers:
+      - image: elasticsearch:6.8.16
+        name: elasticsearch
+        ports:
+        - containerPort: 9002
+        env:
+        - name: discovery.type
+          value: single-node
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: elasticsearch
+  name: elasticsearch
+spec:
+  ports:
+  - name: 9200-9200
+    port: 9200
+    protocol: TCP
+    targetPort: 9200  
+  selector:
+    app: elasticsearch
+  type: ClusterIP
+status:
+  loadBalancer: {}

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ecommunities
+  name: ecommunities
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommunities
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ecommunities
+    spec:
+      containers:
+      - image: vvenega/ecommunities:latest
+        name: ecommunities
+        ports:
+        - name: containerport         
+          containerPort: 8080
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ecommunities
+  name: ecommunities
+spec:
+  ports:
+  - name: 80-80
+    port: 80
+    protocol: TCP
+    targetPort: containerport
+  selector:
+    app: ecommunities
+  type: LoadBalancer
+status:
+  loadBalancer: {}

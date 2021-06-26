@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: janusgraph053
+  name: janusgraph053
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: janusgraph053
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: janusgraph053
+    spec:
+      containers:
+      - image: janusgraph/janusgraph:0.5.3-cc9517c
+        name: janusgraph
+        env:
+        - name: janusgraph.storage.backend
+          value: cql
+        - name: janusgraph.storage.hostname
+          value: "10.97.134.193"
+        - name: janusgraph.storage.port
+          value: "9042"
+        - name: janusgraph.storage.username
+          value: admin
+        - name: janusgraph.storage.password
+          value: P@5590.78jh!
+        - name: janusgraph.index.search.backend
+          value: elasticsearch
+        - name: janusgraph.index.search.hostname
+          value: 10.98.255.12      
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: janusgraph053
+  name: janusgraph053
+spec:
+  ports:
+  - name: 8182-8182
+    port: 8182
+    protocol: TCP
+    targetPort: 8182
+  selector:
+    app: janusgraph053
+  type: ClusterIP
+status:
+  loadBalancer: {}

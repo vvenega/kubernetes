@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: loginservice
+  name: loginservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loginservice
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: loginservice
+    spec:
+      containers:
+      - image: vvenega/loginservice
+        name: loginservice
+        ports:
+        - containerPort: 8004        
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: loginservice
+  name: loginservice
+spec:
+  ports:
+  - name: 8004-8004
+    port: 8004
+    protocol: TCP
+    targetPort: 8004
+  selector:
+    app: loginservice
+  type: ClusterIP
+status:
+  loadBalancer: {}

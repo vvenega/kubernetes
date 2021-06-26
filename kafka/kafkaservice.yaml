@@ -1,0 +1,63 @@
+apiVersion: v1
+data:
+  config.properties: |
+    IPSERVER=10.105.36.207
+    PORT=9092
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2021-06-24T00:32:44Z"
+  name: propertiesfile
+  namespace: default
+  resourceVersion: "238873"
+  uid: 963f851d-8f6c-44b6-a9f3-d526f5cc1449
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: kafkaservice
+  name: kafkaservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafkaservice
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: kafkaservice
+    spec:
+      containers:
+      - image: vvenega/kafkaservice:latest
+        name: kafkaservice
+        volumeMounts:
+        - name: config-volume
+          mountPath: /msconf
+        resources: {}
+      volumes:
+      - name: config-volume
+        configMap: 
+         name: propertiesfile        
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: kafkaservice
+  name: kafkaservice
+spec:
+  ports:
+  - name: 8002-8002
+    port: 8002
+    protocol: TCP
+    targetPort: 8002
+  selector:
+    app: kafkaservice
+  type: ClusterIP
+status:
+  loadBalancer: {}

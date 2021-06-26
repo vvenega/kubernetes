@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: loginservicedao
+  name: loginservicedao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loginservicedao
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: loginservicedao
+    spec:
+      containers:
+      - image: vvenega/loginservicedao:latest
+        name: loginservicedao
+        volumeMounts:
+        - name: config-volume
+          mountPath: /msconf
+        resources: {}  
+      volumes:
+      - name: config-volume
+        configMap:
+         name: remoteobjects      
+        
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: loginservicedao
+  name: loginservicedao
+spec:
+  ports:
+  - name: 8103-8103
+    port: 8103
+    protocol: TCP
+    targetPort: 8103
+  selector:
+    app: loginservicedao
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+data:
+  remote-objects.yaml: "hosts: [10.102.50.230]\nport: 8182\nserializer: { \n    className:
+    org.apache.tinkerpop.gremlin.driver.ser.GryoMessageSerializerV1d0,\n    config:
+    { ioRegistries: [org.janusgraph.graphdb.tinkerpop.JanusGraphIoRegistry] }}\n"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2021-06-23T21:50:50Z"
+  name: remoteobjects
+  namespace: default
+  resourceVersion: "231729"
+  uid: b0472e97-325e-4e28-9c9e-6613e6acc35a
