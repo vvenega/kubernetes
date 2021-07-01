@@ -36,11 +36,13 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /msconf
-        resources: {}
+        resources:
+          limits:
+            memory: 256Mi
       volumes:
       - name: config-volume
         configMap:
-          name: loginserviceproperties        
+          name: loginserviceproperties
 status: {}
 ---
 apiVersion: v1

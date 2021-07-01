@@ -20,11 +20,14 @@ spec:
       containers:
       - image: janusgraph/janusgraph:0.5.3-cc9517c
         name: janusgraph
+        resources:
+         limits:
+           memory: 512Mi
         env:
         - name: janusgraph.storage.backend
           value: cql
         - name: janusgraph.storage.hostname
-          value: "10.97.134.193"
+          value: "10.245.240.148"
         - name: janusgraph.storage.port
           value: "9042"
         - name: janusgraph.storage.username
@@ -34,7 +37,8 @@ spec:
         - name: janusgraph.index.search.backend
           value: elasticsearch
         - name: janusgraph.index.search.hostname
-          value: 10.98.255.12      
+          value: 10.245.132.45
+
 status: {}
 ---
 apiVersion: v1

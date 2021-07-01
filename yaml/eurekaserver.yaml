@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,7 +23,10 @@ spec:
         name: eurekaserver
         ports:
         - containerPort: 8761
-        resources: {}
+        resources:
+         limits:
+           memory: 384Mi
+
 status: {}
 ---
 apiVersion: v1

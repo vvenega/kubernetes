@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubernetes-ingress
+  #namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+    - www.ecommunities.com.mx
+    secretName: ssl-ingress
+  rules:
+  - host: www.ecommunities.com.mx
+    http:
+      paths:
+      - path: "/msfile"
+        pathType: Prefix
+        backend:
+          service:
+            name: fileuploadservice
+            port:
+              number: 8102
+      - path: "/mslogin"
+        pathType: Prefix
+        backend:
+          service:
+            name: loginservice
+            port:
+              number: 8004
+      - path: "/mslisting"
+        pathType: Prefix
+        backend:
+          service:
+            name: listingservice
+            port:
+              number: 8100
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: ecommunities
+            port:
+              number: 80

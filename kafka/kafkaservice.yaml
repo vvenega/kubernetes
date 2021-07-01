@@ -1,8 +1,11 @@
 apiVersion: v1
 data:
   config.properties: |
-    IPSERVER=10.105.36.207
+    IPSERVER=10.245.19.202
     PORT=9092
+    EVENT_TOPIC=eventtopic
+    PRODUCTREQUESTED_TOPIC=productrequested
+    ADVERTISE_HOST_NAME=advertised.host.name
 kind: ConfigMap
 metadata:
   creationTimestamp: "2021-06-24T00:32:44Z"
@@ -39,8 +42,8 @@ spec:
         resources: {}
       volumes:
       - name: config-volume
-        configMap: 
-         name: propertiesfile        
+        configMap:
+         name: propertiesfile
 status: {}
 ---
 apiVersion: v1

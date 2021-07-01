@@ -17,6 +17,24 @@ spec:
       labels:
         app: elasticsearch
     spec:
+      volumes:
+       - name: task-pv-storage
+         persistentVolumeClaim:
+           claimName: elasticsearch-data
+      initContainers:
+      - name: take-data-dir-ownership
+        image: elasticsearch:6.8.16
+        command: ["sh","-c","mkdir -p /usr/share/elasticsearch/data && chown -R 1000:1000 /usr/share/elasticsearch/data"]
+        # Give `grafana` user (id 472) permissions a mounted volume
+        # https://github.com/grafana/grafana-docker/blob/master/Dockerfile
+        #command:
+        #- chown
+        #- -R
+        #- 472:472
+        #- /usr/share/elasticsearch/data
+        volumeMounts:
+        - name: task-pv-storage
+          mountPath: /usr/share/elasticsearch/data
       containers:
       - image: elasticsearch:6.8.16
         name: elasticsearch
@@ -25,7 +43,12 @@ spec:
         env:
         - name: discovery.type
           value: single-node
-        resources: {}
+        volumeMounts:
+          - mountPath: "/usr/share/elasticsearch/data"
+            name: task-pv-storage
+        resources:
+         limits:
+           memory: 1536Mi
 status: {}
 ---
 apiVersion: v1
@@ -40,7 +63,7 @@ spec:
   - name: 9200-9200
     port: 9200
     protocol: TCP
-    targetPort: 9200  
+    targetPort: 9200
   selector:
     app: elasticsearch
   type: ClusterIP

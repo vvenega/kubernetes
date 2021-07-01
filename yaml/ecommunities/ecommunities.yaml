@@ -5,6 +5,9 @@ metadata:
   labels:
     app: ecommunities
   name: ecommunities
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+    service.beta.kubernetes.io/do-loadbalancer-size-slug: "lb-small"
 spec:
   replicas: 1
   selector:
@@ -21,8 +24,8 @@ spec:
       - image: vvenega/ecommunities:latest
         name: ecommunities
         ports:
-        - name: containerport         
-          containerPort: 8080
+        - name: containerport
+          containerPort: 80
         resources: {}
 status: {}
 ---
@@ -41,6 +44,6 @@ spec:
     targetPort: containerport
   selector:
     app: ecommunities
-  type: LoadBalancer
+  type: ClusterIP
 status:
   loadBalancer: {}

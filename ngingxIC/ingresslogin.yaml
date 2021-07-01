@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubernetes-ingress-login
+  #namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+    - www.ecommunities.com.mx
+    secretName: ssl-ingress
+  rules:
+  - host: www.ecommunities.com.mx
+    http:
+      paths:
+      - path: "/mslogin"
+        pathType: Prefix
+        backend:
+          service:
+            name: loginservice
+            port:
+              number: 8004
